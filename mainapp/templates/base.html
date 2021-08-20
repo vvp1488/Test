@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Главная страница</h1>
+{% if messages %}
+    {% for message in messages %}
+        <p>{{message}}</p>
+    {% endfor %}
+{% endif %}
+<button type="button"><a href="{% url 'register' %}">Добавить пользователя</a> </button>
+<h4>Учетные записи по текущему ip адресу:</h4>
+{% for user in user_current_ip %}
+    <p>{{user.email}} - {{user.ip_address}}</p>
+{% endfor %}<br>
+
+<h4>Учетные записи все:</h4>
+{% for user in users %}
+    <p>{{user.email}} - {{user.ip_address}}</p>
+{% endfor %}
+</body>
+</html>
