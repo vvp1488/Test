@@ -1,12 +1,11 @@
 from django import forms
 from .models import UserModel
-from django.core.validators import EmailValidator,RegexValidator
-import re
+from django.core.validators import RegexValidator
+from django.contrib.auth.models import User
 
 
 class RegistrationForm(forms.Form):
-
-    email = forms.EmailField(max_length=100,validators=[
+    email = forms.EmailField(max_length=100, validators=[
         RegexValidator(
             regex=r'(@gmail.com)$|(@icloud.com)$',
             message='Почта в доменах gmail.com и icloud.com не принимается!',
@@ -14,7 +13,7 @@ class RegistrationForm(forms.Form):
             inverse_match=True,
         )
     ])
-    password = forms.CharField(min_length=7,max_length=16,validators=[
+    password = forms.CharField(min_length=7, max_length=16, validators=[
         RegexValidator(
             regex=r'^[A-Z]\w*(?=\w*\d)(?=\w*[a-z])(?=\w*[_]).*$',
             message='Пароль должен состоять из буквенно-цифровых символов, подчеркивания, обязательно начинаться с прописной (заглавной) буквы',
@@ -39,8 +38,8 @@ class RegistrationForm(forms.Form):
         )
     ])
 
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -49,11 +48,37 @@ class RegistrationForm(forms.Form):
         return email
 
     def save(self):
-        # new_user = UserModel.objects.create(
-        #     email=self.cleaned_data['email'],
-        #     password=self.cleaned_data['password'],
-        #     first_name=self.cleaned_data['first_name'],
-        #     last_name=self.cleaned_data['last_name']
-        # )
-        # return new_user
+        return self.cleaned_data
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=100)
+    password = forms.CharField(max_length=20)
+    confirm_password = forms.CharField(max_length=20)
+
+
+    # class Meta:
+    #     model=User
+    #     fields = ('username','password','confirm_password')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].label = 'Електронная почта'
+        self.fields['password'].label = 'Пароль'
+        self.fields['confirm_password'].label = 'Подтвердите пароль'
+
+    def clean(self):
+        email = self.cleaned_data['username']
+        password = self.cleaned_data['password']
+        confirm_password = self.cleaned_data['confirm_password']
+        if password != confirm_password:
+            raise forms.ValidationError('Пароли не совпадают')
+        if not UserModel.objects.filter(email=email):
+            raise forms.ValidationError('Пользователя не найдено в системе')
+        if not User.objects.filter(username=email):
+            User.objects.create_user(f'{email}',f'{email}',f'{password}')
+        return self.cleaned_data
+
+
+    def save(self):
         return self.cleaned_data

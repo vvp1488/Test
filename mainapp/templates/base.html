@@ -7,12 +7,14 @@
 </head>
 <body>
 <h1>Главная страница</h1>
+<b>Текущий пользователь в системе : {% if not request.user.is_authenticated %} Гость <button type="button"><a href="{% url 'login' %}">Войти</a> </button> {% else %} {{request.user}}{% endif %}</b>
 {% if messages %}
     {% for message in messages %}
         <p>{{message}}</p>
     {% endfor %}
 {% endif %}
-<button type="button"><a href="{% url 'register' %}">Добавить пользователя</a> </button>
+<button type="button"><a href="{% url 'logout' %}">Выйти</a></button>
+<button type="button"><a href="{% url 'register' %}">Добавить учетную запись</a> </button>
 <h4>Учетные записи по текущему ip адресу:</h4>
 {% for user in user_current_ip %}
     <p>{{user.email}} - {{user.ip_address}}</p>
