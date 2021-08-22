@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторизация</title>
+</head>
+<body>
+<h3>Страница логина</h3>
+<form method="POST">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <input action="" type="submit" value="Логин">
+</form>
+</body>
+</html>
