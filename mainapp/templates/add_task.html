@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{% load crispy_forms_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Страница добавления заданий</h1>
+  <form method="POST">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <input  type="submit" value="Создать">
+  </form>
+</body>
+</html>

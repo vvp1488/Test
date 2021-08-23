@@ -1,7 +1,6 @@
 from django import forms
-from .models import User
+from .models import User, Task
 from django.core.validators import RegexValidator
-# from django.contrib.auth.models import User
 
 
 class RegistrationForm(forms.Form):
@@ -56,7 +55,6 @@ class LoginForm(forms.Form):
     password = forms.CharField(max_length=20)
     confirm_password = forms.CharField(max_length=20)
 
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['email'].label = 'Електронная почта'
@@ -74,6 +72,22 @@ class LoginForm(forms.Form):
 
         return self.cleaned_data
 
+    def save(self):
+        return self.cleaned_data
+
+
+class TaskForm(forms.Form):
+    name = forms.CharField(max_length=255)
+    description = forms.CharField(widget=forms.Textarea)
+    #
+    # class Meta:
+    #     model = Task
+    #     fields =['name', 'description','user']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['name'].label = 'Название'
+        self.fields['description'].label = 'Описание'
 
     def save(self):
         return self.cleaned_data

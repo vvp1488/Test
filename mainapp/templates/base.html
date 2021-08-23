@@ -22,16 +22,44 @@
         <p class="alert alert-success">{{message}}</p>
     {% endfor %}
 {% endif %}
+    <div class="row">
+        <div class="col-md-3">
+            <h4 class="mt-2">Список всех зарегистрированых пользователей:</h4>
+            {% if request.user.is_authenticated %}
+                {% for user in users %}
+                <ul>{{user.email}}</ul>
+                {% endfor %}<br>
+            {% else %}
+            <h5 class="mt-4 mb-4 fst-italic">Нужно войти в систему что бы просмотреть</h5>
+            {% endif %}
+        </div>
+            <div class="col-md-6">
+            {% if request.user.is_authenticated %}
+                <h2 class="text-decoration-underline">Список заданий для пользователя - {{request.user}}</h2>
+                <div class="d-grid gap-2">
+                <a class="btn btn-primary" href="{% url 'add_task' %}">Добавить задание</a>
+
+                </div>
+                {% if not tasks %}
+                    Заданий для даного пользователя нету
+                {% else %}
+                {% for task in tasks %}
+                <div class="card mt-2 mb-2" style="width: 35rem;">
+                <div class="card-body">
+                <h5 class="card-title">{{task.name}}</h5>
+                <p class="card-text">{{task.description}}</p>
+                <a href="{% url 'delete_task' id=task.id %}" class="btn btn-danger">Выполнено</a>
+                </div>
+                </div>
+                {% endfor %} {% endif %}
+                {% else %}
+                 <h5 class="mt-4 mb-4 fst-italic">Нужно войти в систему что бы просмотреть</h5>
 
 
-<h4 class="mt-2">Список всех зарегистрированых пользователей:</h4>
-{% if request.user.is_authenticated %}
-{% for user in users %}
-<ul>{{user.email}}</ul>
-{% endfor %}<br>
-{% else %}
-<h5 class="mt-4 mb-4 fst-italic">Нужно войти в систему что бы просмотреть</h5>
-{% endif %}
+                {% endif %}
+            </div>
+    </div>
+
 
 </body>
 </html>
