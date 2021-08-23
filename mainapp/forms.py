@@ -1,7 +1,7 @@
 from django import forms
-from .models import UserModel
+from .models import User
 from django.core.validators import RegexValidator
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 
 
 class RegistrationForm(forms.Form):
@@ -43,7 +43,7 @@ class RegistrationForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        if UserModel.objects.filter(email=email):
+        if User.objects.filter(email=email):
             raise forms.ValidationError(f'Пользователь с почтой {email} уже существует')
         return email
 
@@ -52,31 +52,26 @@ class RegistrationForm(forms.Form):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=100)
+    email = forms.CharField(max_length=100)
     password = forms.CharField(max_length=20)
     confirm_password = forms.CharField(max_length=20)
 
 
-    # class Meta:
-    #     model=User
-    #     fields = ('username','password','confirm_password')
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['username'].label = 'Електронная почта'
+        self.fields['email'].label = 'Електронная почта'
         self.fields['password'].label = 'Пароль'
         self.fields['confirm_password'].label = 'Подтвердите пароль'
 
     def clean(self):
-        email = self.cleaned_data['username']
+        email = self.cleaned_data['email']
         password = self.cleaned_data['password']
         confirm_password = self.cleaned_data['confirm_password']
         if password != confirm_password:
             raise forms.ValidationError('Пароли не совпадают')
-        if not UserModel.objects.filter(email=email):
+        if not User.objects.filter(email=email):
             raise forms.ValidationError('Пользователя не найдено в системе')
-        if not User.objects.filter(username=email):
-            User.objects.create_user(f'{email}',f'{email}',f'{password}')
+
         return self.cleaned_data
 
 

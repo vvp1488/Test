@@ -26,7 +26,8 @@ class UserManager(BaseUserManager):
             first_name = extra_fields['first_name']
             last_name = extra_fields['last_name']
 
-        user = self.model(email=self.normalize_email(email),first_name=first_name,last_name=last_name)
+
+        user = self.model(email=self.normalize_email(email), first_name=first_name, last_name=last_name)
         user.set_password(password)
         user.save()
 
@@ -37,14 +38,12 @@ class UserManager(BaseUserManager):
         if password is None:
             raise TypeError('Superusers must have a password.')
 
-        user = self.create_user(email,password)
+        user = self.create_user(email, password)
         user.is_superuser = True
         user.is_staff = True
         user.save()
 
         return user
-
-
 
     #
     # def _create_user(self, email, password, **extra_fields):
@@ -94,9 +93,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         dt = datetime.now() + timedelta(days=1)
 
         token = jwt.encode({
-            'id':self.pk,
+            'id': self.pk,
             'exp': int(dt.strftime('%s'))
         }, settings.SECRET_KEY, algorithm='HS256')
 
         return token.decode('utf-8')
-

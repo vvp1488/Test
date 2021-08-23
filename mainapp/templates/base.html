@@ -4,25 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
 </head>
 <body>
-<h1>Главная страница</h1>
-<b>Текущий пользователь в системе : {% if not request.user.is_authenticated %} Гость <button type="button"><a href="{% url 'login' %}">Войти</a> </button> {% else %} {{request.user}}{% endif %}</b>
+<nav class="navbar navbar-dark bg-dark">
+  <div class="container-fluid">
+    <span class="navbar-brand mb-0 h1">Вы вошли в систему как {% if not request.user.is_authenticated %}  Гость<a class="btn btn-primary" href="{% url 'login' %}" role="button">Войти</a>  {% else %}{{request.user}}{% endif %}
+    <a class="btn btn-primary" href="{% url 'logout' %}" role="button"> Выйти</a>
+    <a class="btn btn-primary" href="{% url 'register' %}" role="button">Регистрация</a>
+    </span>
+  </div>
+</nav>
+
 {% if messages %}
     {% for message in messages %}
-        <p>{{message}}</p>
+        <p class="alert alert-success">{{message}}</p>
     {% endfor %}
 {% endif %}
-<button type="button"><a href="{% url 'logout' %}">Выйти</a></button>
-<button type="button"><a href="{% url 'register' %}">Добавить учетную запись</a> </button>
-<h4>Учетные записи по текущему ip адресу:</h4>
-{% for user in user_current_ip %}
-    <p>{{user.email}} - {{user.ip_address}}</p>
-{% endfor %}<br>
 
-<h4>Учетные записи все:</h4>
+
+<h4 class="mt-2">Список всех зарегистрированых пользователей:</h4>
+{% if request.user.is_authenticated %}
 {% for user in users %}
-    <p>{{user.email}} - {{user.ip_address}}</p>
-{% endfor %}
+<ul>{{user.email}}</ul>
+{% endfor %}<br>
+{% else %}
+<h5 class="mt-4 mb-4 fst-italic">Нужно войти в систему что бы просмотреть</h5>
+{% endif %}
+
 </body>
 </html>
