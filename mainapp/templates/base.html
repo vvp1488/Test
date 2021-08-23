@@ -8,7 +8,7 @@
 
 </head>
 <body>
-<nav class="navbar navbar-dark bg-dark">
+<nav class="container navbar navbar-dark bg-dark">
   <div class="container-fluid">
     <span class="navbar-brand mb-0 h1">Вы вошли в систему как {% if not request.user.is_authenticated %}  Гость<a class="btn btn-primary" href="{% url 'login' %}" role="button">Войти</a>  {% else %}{{request.user}}{% endif %}
     <a class="btn btn-primary" href="{% url 'logout' %}" role="button"> Выйти</a>
@@ -16,12 +16,14 @@
     </span>
   </div>
 </nav>
-
+<div class="container mb-2 mt-2">
 {% if messages %}
     {% for message in messages %}
         <p class="alert alert-success">{{message}}</p>
     {% endfor %}
 {% endif %}
+    </div>
+<div class="container">
     <div class="row">
         <div class="col-md-3">
             <h4 class="mt-2">Список всех зарегистрированых пользователей:</h4>
@@ -58,6 +60,7 @@
 
                 {% endif %}
             </div>
+    </div>
     </div>
 
 

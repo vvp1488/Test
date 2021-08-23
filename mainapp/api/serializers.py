@@ -35,7 +35,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         min_length=7,
         max_length=16, validators=[
             RegexValidator(
-                regex=r'^[A-Z]\w*(?=\w*\d)(?=\w*[a-z])(?=\w*[_]).*$',
+                regex=r'^[A-ZА-Я]\w*(?=\w*\d)(?=\w*[a-zа-я])(?=\w*[_]).*$',
                 message='Пароль должен состоять из буквенно-цифровых символов, подчеркивания, обязательно начинаться с прописной (заглавной) буквы',
                 code='invalid',
                 inverse_match=False,
@@ -43,7 +43,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         ])
     first_name = serializers.CharField(validators=[
         RegexValidator(
-            regex=r'^[a-zA-Z-]*[a-zA-Z-]$',
+            regex=r'^[a-zA-Zа-яА-Я-]*[a-zA-Zа-ЯА-Я-]$',
             message='Допустимо только буквы и тире',
             code='invalid',
             inverse_match=False,
@@ -51,7 +51,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     ])
     last_name = serializers.CharField(validators=[
         RegexValidator(
-            regex=r'^[a-zA-Z-\s]*[a-zA-Z-\s]$',
+            regex=r'^[a-zA-Zа-яА-Я-\s]*[a-zA-Zа-яА-Я-\s]$',
             message='Допустимо только буквы, тире и пробел.',
             code='invalid',
             inverse_match=False,

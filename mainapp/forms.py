@@ -14,7 +14,7 @@ class RegistrationForm(forms.Form):
     ])
     password = forms.CharField(min_length=7, max_length=16, validators=[
         RegexValidator(
-            regex=r'^[A-Z]\w*(?=\w*\d)(?=\w*[a-z])(?=\w*[_]).*$',
+            regex=r'^[A-ZА-Я]\w*(?=\w*\d)(?=\w*[a-zа-я])(?=\w*[_]).*$',
             message='Пароль должен состоять из буквенно-цифровых символов, подчеркивания, обязательно начинаться с прописной (заглавной) буквы',
             code='invalid',
             inverse_match=False,
@@ -22,7 +22,7 @@ class RegistrationForm(forms.Form):
     ])
     first_name = forms.CharField(validators=[
         RegexValidator(
-            regex=r'^[a-zA-Z-]*[a-zA-Z-]$',
+            regex=r'^[a-zA-Zа-яА-Я-]*[a-zA-Zа-яА-Я-]$',
             message='Допустимо только буквы и тире',
             code='invalid',
             inverse_match=False,
@@ -30,7 +30,7 @@ class RegistrationForm(forms.Form):
     ])
     last_name = forms.CharField(validators=[
         RegexValidator(
-            regex=r'^[a-zA-Z-\s]*[a-zA-Z-\s]$',
+            regex=r'^[a-zA-Zа-яА-Я-\s]*[a-zA-Zа-яА-Я-\s]$',
             message='Допустимо только буквы, тире и пробел.',
             code='invalid',
             inverse_match=False,
@@ -39,6 +39,11 @@ class RegistrationForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['email'].label = 'Электронная почта'
+        self.fields['password'].label = 'Пароль'
+        self.fields['first_name'].label = 'Имя'
+        self.fields['last_name'].label = 'Фамилия'
+
 
     def clean_email(self):
         email = self.cleaned_data['email']

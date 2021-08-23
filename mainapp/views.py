@@ -40,7 +40,8 @@ class RegistrationView(View):
                 email=form.cleaned_data["email"],
                 password=form.cleaned_data["password"],
                 first_name=form.cleaned_data["first_name"],
-                last_name=form.cleaned_data["last_name"]
+                last_name=form.cleaned_data["last_name"],
+                # ip_address=ip
             )
             messages.add_message(request, messages.INFO, 'Пользователь успешно создан')
             return HttpResponseRedirect('/')
@@ -85,9 +86,6 @@ class AddTask(View):
 
     def get(self, request, *args, **kwargs):
         form = TaskForm(request.POST or None)
-        # if form.is_valid():
-        #     name = form.cleaned_data['name']
-        #     description = form.cleaned_data['description']
         return render(request,'add_task.html',context={'form': form})
 
     def post(self, request, *args, **kwargs):
